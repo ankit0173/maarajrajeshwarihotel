@@ -277,13 +277,16 @@ ul {
         width: 250px;
         max-width: calc(100vw - 48px);
         height: auto;
-        background: var(--brown-dark);
-        border: 1px solid rgba(255, 255, 255, 0.05);
-        border-radius: 12px;
-        box-shadow: var(--shadow-lg);
+        background: #392b26;
+        /* Deep earthy dark grey/brown */
+        border: 1px solid rgba(255, 255, 255, 0.06);
+        border-radius: 16px;
+        /* Smooth Google-like corners */
+        box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4);
         display: flex;
         flex-direction: column;
-        padding: 16px 8px;
+        padding: 12px 8px;
+        /* Slightly tighter padding */
         opacity: 0;
         pointer-events: none;
         transform: translateY(-10px);
@@ -299,25 +302,32 @@ ul {
 
     .nav__list {
         flex-direction: column;
-        gap: 4px;
+        gap: 2px;
+        /* Tighter gap so hover states look cohesive */
         width: 100%;
         align-items: flex-start;
     }
 
     .nav__link {
-        font-size: 1.15rem;
+        font-size: 1.05rem;
+        /* Clean refined size */
+        font-weight: 500;
         color: rgba(255, 255, 255, 0.9);
-        padding: 10px 16px;
+        padding: 12px 16px;
         width: 100%;
         text-align: left;
         display: block;
-        border-radius: 8px;
+        border-radius: 10px;
+        /* Rounded highlight state */
+        transition: all 0.2s var(--ease-smooth);
     }
 
     .nav__link:hover,
     .nav__link.active {
         color: var(--mustard-light);
+        /* Golden text */
         background: rgba(255, 255, 255, 0.08);
+        /* Lighter brown/grey highlight box */
     }
 }
 

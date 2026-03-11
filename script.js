@@ -23,6 +23,15 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
+    // --- Close mobile nav on outside click ---
+    document.addEventListener('click', (e) => {
+        if (nav.classList.contains('open') && !nav.contains(e.target) && !hamburger.contains(e.target)) {
+            hamburger.classList.remove('active');
+            nav.classList.remove('open');
+            document.body.classList.remove('nav-open');
+        }
+    });
+
 
     // --- Sticky Header ---
     const header = document.getElementById('header');

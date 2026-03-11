@@ -270,66 +270,52 @@ ul {
     }
 
     .nav {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100vw;
-        height: 100vh;
-        height: 100dvh;
-        background: linear-gradient(135deg, var(--brown-dark) 0%, var(--terracotta-dark) 100%);
+        position: absolute;
+        top: calc(100% + 10px);
+        right: 24px;
+        left: auto;
+        width: 250px;
+        max-width: calc(100vw - 48px);
+        height: auto;
+        background: var(--brown-dark);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        border-radius: 12px;
+        box-shadow: var(--shadow-lg);
         display: flex;
-        align-items: center;
-        justify-content: center;
+        flex-direction: column;
+        padding: 16px 8px;
         opacity: 0;
         pointer-events: none;
-        transition: opacity 0.4s var(--ease-smooth);
+        transform: translateY(-10px);
+        transition: opacity 0.3s var(--ease-smooth), transform 0.3s var(--ease-smooth);
         z-index: 999;
     }
 
     .nav.open {
         opacity: 1;
+        transform: translateY(0);
         pointer-events: all;
     }
 
     .nav__list {
         flex-direction: column;
-        gap: 8px;
+        gap: 4px;
+        width: 100%;
+        align-items: flex-start;
     }
 
     .nav__link {
-        font-size: 1.35rem;
+        font-size: 1.15rem;
         color: rgba(255, 255, 255, 0.9);
-        padding: 12px 32px;
+        padding: 10px 16px;
+        width: 100%;
+        text-align: left;
+        display: block;
+        border-radius: 8px;
     }
 
     .nav__link:hover,
     .nav__link.active {
-        color: var(--mustard-light);
-        background: rgba(255, 255, 255, 0.08);
-    }
-
-    /* Hide header background/filter when mobile nav is open */
-    body.nav-open .header {
-        background: transparent !important;
-        box-shadow: none !important;
-    }
-
-    body.nav-open .header::before {
-        display: none !important;
-    }
-
-    /* Assure hamburger icon turns white when menu opens on scrolled header */
-    body.nav-open .hamburger span {
-        background: var(--white) !important;
-    }
-
-    /* Override scrolled header link colors when menu is open */
-    .header.scrolled .nav.open .nav__link {
-        color: rgba(255, 255, 255, 0.9);
-    }
-
-    .header.scrolled .nav.open .nav__link:hover,
-    .header.scrolled .nav.open .nav__link.active {
         color: var(--mustard-light);
         background: rgba(255, 255, 255, 0.08);
     }

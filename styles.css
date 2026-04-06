@@ -1315,14 +1315,14 @@ ul {
 }
 .bk-cover-h {
     font-family: var(--font-heading);
-    font-size: clamp(1.6rem, 2.8vw, 2.5rem);
+    font-size: clamp(0.95rem, 4.5vw, 1.55rem);
     color: var(--maroon);
     font-weight: 700;
-    line-height: 1.25;
+    line-height: 1.15;
 }
 .bk-cover-s {
     font-family: var(--font-heading);
-    font-size: 1.1rem;
+    font-size: clamp(0.7rem, 2.8vw, 0.9rem);
     font-weight: 600;
     color: var(--maroon-light);
     opacity: 0.85;
@@ -1338,12 +1338,12 @@ ul {
 }
 .bk-cat {
     font-family: var(--font-heading);
-    font-size: clamp(1.15rem, 2.2vw, 1.65rem);
+    font-size: clamp(0.85rem, 4vw, 1.3rem);
     font-weight: 700;
     color: var(--maroon);
-    border-bottom: 2.5px solid var(--maroon);
-    padding-bottom: 10px;
-    margin-bottom: 14px;
+    border-bottom: 2px solid var(--maroon);
+    padding-bottom: 6px;
+    margin-bottom: 10px;
     text-align: center;
     letter-spacing: 0.02em;
 }
@@ -1353,14 +1353,14 @@ ul {
     flex: 1;
 }
 .bk-items li {
-    font-size: clamp(0.92rem, 1.35vw, 1.07rem);
+    font-size: clamp(0.68rem, 3.2vw, 0.85rem);
     font-weight: 500;
     color: var(--text-primary);
-    padding: 7px 0;
-    border-bottom: 1px dashed rgba(128,0,0,0.2);
+    padding: 5px 0;
+    border-bottom: 1px dashed rgba(128,0,0,0.12);
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 5px;
 }
 .bk-items li::before {
     content: '•';

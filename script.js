@@ -33,21 +33,78 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
 
-    // --- Sticky Header ---
+    // --- Performance-Optimized Scroll Engine ---
     const header = document.getElementById('header');
-    let lastScroll = 0;
+    const scrollProgress = document.getElementById('scroll-progress');
+    const backToTop = document.getElementById('back-to-top');
+    const fab = document.getElementById('fab-call');
+    const hero = document.querySelector('.hero');
+    const sections = document.querySelectorAll('section[id]');
 
-    window.addEventListener('scroll', () => {
-        const currentScroll = window.pageYOffset;
+    let ticking = false;
 
-        if (currentScroll > 80) {
-            header.classList.add('scrolled');
-        } else {
-            header.classList.remove('scrolled');
+    function onScroll() {
+        if (!ticking) {
+            window.requestAnimationFrame(() => {
+                updateUI();
+                ticking = false;
+            });
+            ticking = true;
+        }
+    }
+
+    function updateUI() {
+        const scrolled = window.pageYOffset;
+        const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
+
+        // 1. Sticky Header
+        if (header) {
+            if (scrolled > 80) header.classList.add('scrolled');
+            else header.classList.remove('scrolled');
         }
 
-        lastScroll = currentScroll;
-    }, { passive: true });
+        // 2. Scroll Progress Bar
+        if (scrollProgress && totalHeight > 0) {
+            const progress = (scrolled / totalHeight) * 100;
+            scrollProgress.style.width = `${progress}%`;
+        }
+
+        // 3. Back to Top & FAB Visibility
+        if (backToTop) {
+            if (scrolled > 400) backToTop.classList.add('visible');
+            else backToTop.classList.remove('visible');
+        }
+        if (fab) {
+            if (scrolled > 500) fab.classList.add('visible');
+            else fab.classList.remove('visible');
+        }
+
+        // 4. Hero Parallax
+        if (hero && scrolled < window.innerHeight) {
+            hero.style.setProperty('--parallax-offset', `${scrolled * 0.35}px`);
+        }
+
+        // 5. Active Nav Link (moved into unified tick for smoothness)
+        sections.forEach(section => {
+            const sectionHeight = section.offsetHeight;
+            const sectionTop = section.offsetTop - 150;
+            const id = section.getAttribute('id');
+            const navLink = document.querySelector(`.nav__link[href="#${id}"]`);
+
+            if (navLink) {
+                if (scrolled > sectionTop && scrolled <= sectionTop + sectionHeight) {
+                    navLink.classList.add('active');
+                } else {
+                    navLink.classList.remove('active');
+                }
+            }
+        });
+    }
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+
+    // Initial check on load
+    updateUI();
 
 
     // --- Smooth Scroll for Anchor Links ---
@@ -56,7 +113,7 @@ document.addEventListener('DOMContentLoaded', () => {
             e.preventDefault();
             const target = document.querySelector(this.getAttribute('href'));
             if (target) {
-                const headerHeight = header.offsetHeight;
+                const headerHeight = header ? header.offsetHeight : 0;
                 const elementPosition = target.getBoundingClientRect().top + window.pageYOffset;
                 window.scrollTo({
                     top: elementPosition - headerHeight - 10,
@@ -67,34 +124,8 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
 
-    // --- Active Nav Link on Scroll ---
-    const sections = document.querySelectorAll('section[id]');
-
-    function highlightNav() {
-        const scrollY = window.pageYOffset;
-
-        sections.forEach(section => {
-            const sectionHeight = section.offsetHeight;
-            const sectionTop = section.offsetTop - 120;
-            const id = section.getAttribute('id');
-            const navLink = document.querySelector(`.nav__link[href="#${id}"]`);
-
-            if (navLink) {
-                if (scrollY > sectionTop && scrollY <= sectionTop + sectionHeight) {
-                    navLink.classList.add('active');
-                } else {
-                    navLink.classList.remove('active');
-                }
-            }
-        });
-    }
-
-    window.addEventListener('scroll', highlightNav, { passive: true });
-
-
-    // --- Scroll Reveal Animations ---
+    // --- Scroll Reveal Animations (IntersectionObserver is performant, keep as is) ---
     const revealElements = document.querySelectorAll('.reveal');
-
     const revealObserver = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
@@ -102,62 +133,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 revealObserver.unobserve(entry.target);
             }
         });
-    }, {
-        threshold: 0.15,
-        rootMargin: '0px 0px -50px 0px'
-    });
+    }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
 
     revealElements.forEach(el => revealObserver.observe(el));
 
 
-    // --- Floating Action Button visibility ---
-    const fab = document.getElementById('fab-call');
-
-    window.addEventListener('scroll', () => {
-        if (window.pageYOffset > 500) {
-            fab.classList.add('visible');
-        } else {
-            fab.classList.remove('visible');
-        }
-    }, { passive: true });
-
-
-    // --- Parallax effect on hero ---
-    const hero = document.querySelector('.hero');
-
-    window.addEventListener('scroll', () => {
-        const scrolled = window.pageYOffset;
-        if (scrolled < window.innerHeight) {
-            hero.style.setProperty('--parallax-offset', `${scrolled * 0.4}px`);
-        }
-
-        // --- Scroll Progress Bar ---
-        const scrollProgress = document.getElementById('scroll-progress');
-        if (scrollProgress) {
-            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-            const progress = (scrolled / height) * 100;
-            scrollProgress.style.width = `${progress}%`;
-        }
-
-        // --- Back to Top Visibility ---
-        const backToTop = document.getElementById('back-to-top');
-        if (backToTop) {
-            if (scrolled > 400) {
-                backToTop.classList.add('visible');
-            } else {
-                backToTop.classList.remove('visible');
-            }
-        }
-    }, { passive: true });
-
     // --- Back to Top Click Functionality ---
-    const btnToTop = document.getElementById('back-to-top');
-    if (btnToTop) {
-        btnToTop.addEventListener('click', () => {
-            window.scrollTo({
-                top: 0,
-                behavior: 'smooth'
-            });
+    if (backToTop) {
+        backToTop.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         });
     }
 

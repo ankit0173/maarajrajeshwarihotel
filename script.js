@@ -130,7 +130,36 @@ document.addEventListener('DOMContentLoaded', () => {
         if (scrolled < window.innerHeight) {
             hero.style.setProperty('--parallax-offset', `${scrolled * 0.4}px`);
         }
+
+        // --- Scroll Progress Bar ---
+        const scrollProgress = document.getElementById('scroll-progress');
+        if (scrollProgress) {
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const progress = (scrolled / height) * 100;
+            scrollProgress.style.width = `${progress}%`;
+        }
+
+        // --- Back to Top Visibility ---
+        const backToTop = document.getElementById('back-to-top');
+        if (backToTop) {
+            if (scrolled > 400) {
+                backToTop.classList.add('visible');
+            } else {
+                backToTop.classList.remove('visible');
+            }
+        }
     }, { passive: true });
+
+    // --- Back to Top Click Functionality ---
+    const btnToTop = document.getElementById('back-to-top');
+    if (btnToTop) {
+        btnToTop.addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+    }
 
 
     /* ═══════════════════════════════════════════════════════════════
